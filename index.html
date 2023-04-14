@@ -447,6 +447,11 @@
                 </div>
             </div>
         </div>
+
+        <!-- Kakao Map Div-->
+        <div id="map" style="width:500px;height:400px;"></div>
+
+
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
@@ -456,5 +461,40 @@
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <!-- Kakao Map API -->
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=bb773a269db2e63309c615285b288f5a"></script>
+        <script>
+
+            /* Javascript 샘플 코드 */
+            var xhr = new XMLHttpRequest();
+            var url = 'http://apis.data.go.kr/6260000/BusanVsGnrsInfoService/getVsGnrsInfo'; /*URL*/
+            var queryParams = '?' + encodeURIComponent('serviceKey') + '='+'IgcIKFY4NcNyX0hhy96oeHjMBCY6KfF3G7NHbsnhk1jNwS4AMmCfD6J%2FqmSIrEj0fryiFcr76zQIiDWwnL9LxQ%3D%3D'; /*Service Key*/
+            queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); /**/
+            queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('10'); /**/
+            queryParams += '&' + encodeURIComponent('rentNm') + '=' + encodeURIComponent('삼락생태공원 - 테니스장(동절기)'); /**/
+            queryParams += '&' + encodeURIComponent('resultType') + '=' + encodeURIComponent('json'); /**/
+            xhr.open('GET', url + queryParams);
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4) {
+                    alert('Status: '+this.status+'nHeaders: '+JSON.stringify(this.getAllResponseHeaders())+'nBody: '+this.responseText);
+                    alert(this.responseText);
+                    alert(this.responseText.getVsGnrsInfo);
+                    alert(this.responseText.getVsGnrsInfo.body.items.item[0].adresLa);
+
+                    var container = document.getElementById('map');
+                    var options = {
+                        center: new kakao.maps.LatLng(xhr.getVsGnrsInfo.body.items.item[0].adresLo, xhr.getVsGnrsInfo.body.items.item[0].adresLa),
+                        level: 3
+                    };
+            
+                    var map = new kakao.maps.Map(container, options);
+                    var mapTypeControl = new kakao.maps.MapTypeControl();
+                    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+                    var zoomControl = new kakao.maps.ZoomControl();
+                    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+                        }
+                    };
+            xhr.send('');
+        </script>
     </body>
 </html>
